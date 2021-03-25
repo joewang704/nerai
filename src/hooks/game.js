@@ -9,12 +9,18 @@ const initialState = {
     level: 1,
     xp: 0,
   },
+  sensitivity: 1,
 };
 
 export const getXPToLevel = (lvl) => lvl * lvl * 10;
 
 const reducer = (state, action) => {
   switch(action.type) {
+    case 'setSensitivity':
+      return {
+        ...state,
+        sensitivity: action.payload.sensitivity,
+      }
     case 'startGame':
       return {
         ...state,

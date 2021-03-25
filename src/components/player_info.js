@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 
 import { GameContext } from './app';
-import { getXPToLevel } from '../hooks/player';
+import { getXPToLevel } from '../hooks/game';
 
 const Container = styled.div`
   position: absolute;

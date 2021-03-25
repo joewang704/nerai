@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useRef, useCallback } from 'react';
 import * as d3 from 'd3-timer';
 
-import { GameContext, PlayerContext } from './app';
+import { GameContext } from './app';
 import EnemyInfo from './enemy_info';
 import PlayerInfo from './player_info';
 import { degToRad, random, useStableCB } from '../utils';
@@ -11,7 +11,6 @@ const RADIUS = 5;
 
 const Game = ({ screenHandle }) => {
   const { state, dispatch } = useContext(GameContext);
-  const { playerState, playerDispatch } = useContext(PlayerContext);
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState();
   const [ctx, setCtx] = useState();
@@ -66,7 +65,7 @@ const Game = ({ screenHandle }) => {
       dispatch({
         type: 'damageEnemy',
         payload: {
-          damage: playerState.damage,
+          damage: state.player.damage,
         }
       });
     }
@@ -139,8 +138,8 @@ const Game = ({ screenHandle }) => {
       cursorRef.current = { x, y: 1 }
       return
     }
-    const dx = e.movementX * .4;
-    const dy = e.movementY * .4;
+    const dx = e.movementX * (state.sensitivity || 1);
+    const dy = e.movementY * (state.sensitivity || 1);
     cursorRef.current = { x: x + dx, y: y + dy }
   }, [cursorRef, canvas]);
 
