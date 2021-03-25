@@ -33,7 +33,7 @@ const DUNGEON_1_INFO = {
       name: 'Slime Boss',
       hp: 1000,
       maxHP: 1000,
-      damage: 100,
+      damage: 20,
       xp: 10,
     },
   ]

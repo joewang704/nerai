@@ -28,6 +28,8 @@ const App = () => {
         <FullScreen handle={gameScreen}>
           {state.status === 'RUNNING' && gameScreen.active && <Game screenHandle={gameScreen}/>}
         </FullScreen>
+        {state.status === 'COMPLETED' && <>You're a beast lol</>}
+        {state.status === 'GAME_OVER' && <>You suck lol</>}
       </Container>
     </GameContext.Provider>
   );

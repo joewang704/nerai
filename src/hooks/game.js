@@ -76,11 +76,17 @@ const reducer = (state, action) => {
     case 'takeDamage': {
       const { enemies, currentEnemyIdx } = state;
       const enemy = enemies[currentEnemyIdx];
+      const newHP = Math.max(state.player.hp - enemy.damage, 0);
+      if (!newHP) {
+        return {
+          status: 'GAME_OVER',
+        };
+      }
       return {
         ...state,
         player: {
           ...state.player,
-          hp: state.player.hp - enemy.damage,
+          hp: newHP,
         },
       }
     }
