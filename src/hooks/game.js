@@ -1,18 +1,15 @@
 import { useReducer } from 'react';
 
+import { fetchPlayer, fetchSensitivity } from '../utils/localStorage';
+
 const initialState = {
   status: 'INITIAL',
-  player: {
-    hp: 100,
-    maxHP: 100,
-    damage: 10,
-    level: 1,
-    xp: 0,
-  },
-  sensitivity: 1,
+  player: fetchPlayer(),
+  sensitivity: fetchSensitivity(),
 };
 
 export const getXPToLevel = (lvl) => lvl * lvl * 10;
+export const getDmg = (lvl) => lvl * lvl + 10;
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -37,7 +34,7 @@ const reducer = (state, action) => {
       const { enemies, currentEnemyIdx } = state;
       const enemy = enemies[currentEnemyIdx];
       const newEnemies = enemies.slice();
-      const newHP = Math.max(enemy.hp - 10, 0);
+      const newHP = Math.max(enemy.hp - action.payload.damage, 0);
       newEnemies[currentEnemyIdx] = {
         ...enemy,
         hp: newHP,

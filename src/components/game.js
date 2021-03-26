@@ -5,7 +5,7 @@ import { GameContext } from './app';
 import EnemyInfo from './enemy_info';
 import PlayerInfo from './player_info';
 import { degToRad, random, useStableCB } from '../utils';
-
+import { getDmg } from '../hooks/game';
 
 const RADIUS = 5;
 
@@ -65,7 +65,7 @@ const Game = ({ screenHandle }) => {
       dispatch({
         type: 'damageEnemy',
         payload: {
-          damage: state.player.damage,
+          damage: getDmg(state.player.level),
         }
       });
     }

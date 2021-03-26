@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 
 import { GameContext } from './app';
-import { getXPToLevel } from '../hooks/game';
+import { getXPToLevel, getDmg } from '../hooks/game';
 
 const Container = styled.div`
   position: absolute;
@@ -71,10 +71,11 @@ const PlayerInfo = () => {
   const { state } = useContext(GameContext);
   const { player } = state;
   const maxXP = getXPToLevel(player.level);
+  const damage = getDmg(player.level);
 
   return (
     <Container>
-      <h1>Player, Level: {player.level}, Damage: {player.damage}</h1>
+      <h1>Player, Level: {player.level}, Damage: {damage}</h1>
       <HealthContainer>
         <Text>{player.hp} / {player.maxHP}</Text>
         <Health percent={player.hp / player.maxHP} />

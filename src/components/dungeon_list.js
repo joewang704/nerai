@@ -6,29 +6,29 @@ import { GameContext } from './app';
 const Container = styled.div`
 `;
 
+const SLIME_INFO = {
+  name: 'Slime',
+  hp: 100,
+  maxHP: 100,
+  damage: 10,
+  xp: 5,
+  lvl: 1,
+};
+
+const BOOGIE_INFO = {
+  name: 'Boogie',
+  hp: 400,
+  maxHP: 400,
+  damage: 40,
+  xp: 50,
+  lvl: 5,
+};
+
 const DUNGEON_1_INFO = {
   enemies: [
-    {
-      name: 'Slime',
-      hp: 100,
-      maxHP: 100,
-      damage: 10,
-      xp: 5,
-    },
-    {
-      name: 'Slime',
-      hp: 100,
-      maxHP: 100,
-      damage: 10,
-      xp: 5,
-    },
-    {
-      name: 'Slime',
-      hp: 100,
-      maxHP: 100,
-      damage: 10,
-      xp: 5,
-    },
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
     {
       name: 'Slime Boss',
       hp: 1000,
@@ -38,9 +38,23 @@ const DUNGEON_1_INFO = {
     },
   ]
 };
+const DUNGEON_2_INFO = {
+  enemies: [
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    {
+      name: 'Oogie Boss',
+      hp: 2000,
+      maxHP: 2000,
+      damage: 200,
+      xp: 50,
+    },
+  ]
+};
 
 const DungeonList = ({ openGameScreen }) => {
-  const { state, dispatch } = useContext(GameContext);
+  const { dispatch } = useContext(GameContext);
 
   return (
     <Container>
@@ -51,6 +65,13 @@ const DungeonList = ({ openGameScreen }) => {
         });
         openGameScreen();
       }}>Dungeon 1</button>
+      <button onClick={() => {
+        dispatch({
+          type: 'startGame',
+          payload: DUNGEON_2_INFO,
+        });
+        openGameScreen();
+      }}>Dungeon 2</button>
     </Container>
   );
 }
