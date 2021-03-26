@@ -24,9 +24,6 @@ const App = () => {
       saveSensitivity(sensitivity);
     }
     if (player) {
-      // Reset player
-      player.hp = player.maxHP;
-
       savePlayer(JSON.stringify(player));
     }
   }, [state.sensitivity, state.player]);

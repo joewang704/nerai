@@ -9,8 +9,13 @@ const INITIAL_SENSITIVITY = 0.4;
 
 export const savePlayer = (player) => localStorage.setItem('player', player);
 export const fetchPlayer = () => {
-    const player = localStorage.getItem('player');
-    return player ? JSON.parse(player) : INITIAL_PLAYER_STATS;
+  const playerJSON = localStorage.getItem('player');
+  if (playerJSON) {
+    const player = JSON.parse(playerJSON);
+    player.hp = player.maxHP;
+    return player;
+  }
+  return INITIAL_PLAYER_STATS;
 }
 
 export const saveSensitivity = (sensitivity) => localStorage.setItem('sensitivity', sensitivity);

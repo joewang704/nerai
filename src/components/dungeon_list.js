@@ -31,8 +31,8 @@ const DUNGEON_1_INFO = {
     SLIME_INFO,
     {
       name: 'Slime Boss',
-      hp: 1000,
-      maxHP: 1000,
+      hp: 500,
+      maxHP: 500,
       damage: 20,
       xp: 10,
     },
@@ -45,8 +45,8 @@ const DUNGEON_2_INFO = {
     BOOGIE_INFO,
     {
       name: 'Oogie Boss',
-      hp: 2000,
-      maxHP: 2000,
+      hp: 1500,
+      maxHP: 1500,
       damage: 200,
       xp: 50,
     },
