@@ -4,6 +4,15 @@ import styled from '@emotion/styled';
 import { GameContext } from './app';
 
 const Container = styled.div`
+  display: flex;
+`;
+
+const DungeonContainer = styled.div`
+  background-color: #eee;
+  margin: 24px;
+  padding: 24px;
+  padding-top: 8px;
+  border-radius: 4px;
 `;
 
 const SLIME_INFO = {
@@ -24,7 +33,44 @@ const BOOGIE_INFO = {
   lvl: 5,
 };
 
-const DUNGEON_1_INFO = {
+const SLIME_FARM = {
+  name: 'Slime Farm',
+  enemies: [
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
+    SLIME_INFO,
+  ],
+  timer: 9999,
+  lvl: 1,
+};
+
+const BOOGIE_FARM = {
+  name: 'Boogie Farm',
+  enemies: [
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+    BOOGIE_INFO,
+  ],
+  timer: 9999,
+  lvl: 5,
+};
+
+const SLIME_DUNGEON = {
+  name: 'Slime Dungeon',
   enemies: [
     SLIME_INFO,
     SLIME_INFO,
@@ -35,10 +81,15 @@ const DUNGEON_1_INFO = {
       maxHP: 500,
       damage: 20,
       xp: 10,
+      lvl: 1,
     },
-  ]
+  ],
+  timer: 60,
+  lvl: 1,
 };
-const DUNGEON_2_INFO = {
+
+const BOOGIE_DUNGEON = {
+  name: 'Boogie Dungeon',
   enemies: [
     BOOGIE_INFO,
     BOOGIE_INFO,
@@ -49,29 +100,39 @@ const DUNGEON_2_INFO = {
       maxHP: 1500,
       damage: 200,
       xp: 50,
+      lvl: 5,
     },
-  ]
+  ],
+  timer: 60,
+  lvl: 5,
 };
+
+const DUNGEONS = [
+  SLIME_FARM,
+  SLIME_DUNGEON,
+  BOOGIE_FARM,
+  BOOGIE_DUNGEON,
+]
 
 const DungeonList = ({ openGameScreen }) => {
   const { dispatch } = useContext(GameContext);
 
   return (
     <Container>
-      <button onClick={() => {
-        dispatch({
-          type: 'startGame',
-          payload: DUNGEON_1_INFO,
-        });
-        openGameScreen();
-      }}>Dungeon 1</button>
-      <button onClick={() => {
-        dispatch({
-          type: 'startGame',
-          payload: DUNGEON_2_INFO,
-        });
-        openGameScreen();
-      }}>Dungeon 2</button>
+      {DUNGEONS.map(dungeon => (
+        <DungeonContainer>
+          <h3>{dungeon.name}</h3>
+          <div>Level: {dungeon.lvl}</div>
+          <div>Items: TBD</div>
+          <button onClick={() => {
+            dispatch({
+              type: 'startGame',
+              payload: dungeon,
+            });
+            openGameScreen();
+          }}>Start</button>
+        </DungeonContainer>
+      ))}
     </Container>
   );
 }

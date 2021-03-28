@@ -23,6 +23,7 @@ const reducer = (state, action) => {
         ...state,
         status: 'RUNNING',
         enemies: action.payload.enemies,
+        timer: action.payload.timer,
         currentEnemyIdx: 0,
       }
     case 'nextEnemy':

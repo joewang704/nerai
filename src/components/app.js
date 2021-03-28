@@ -31,7 +31,7 @@ const App = () => {
   return (
     <GameContext.Provider value={{ state, dispatch }}>
       <Container>
-        {state.status === 'INITIAL' &&
+        {state.status !== 'RUNNING' &&
           <>
             <DungeonList openGameScreen={gameScreen.enter} />
             <SensitivityInput />

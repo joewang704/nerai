@@ -104,11 +104,18 @@ const Game = ({ screenHandle }) => {
     ctx.closePath();
   }
 
-  const tickAnimation = useStableCB((_, [canvas, ctx]) => {
+  const tickAnimation = useStableCB((timeElapsed, [canvas, ctx]) => {
     if (!canvas || !ctx) return;
 
     spawnTarget(canvas);
     drawCanvas(canvas, ctx);
+    ctx.fillStyle = "white";
+    ctx.font = "30px Helvetica";
+    const timerSec = (state.timer - timeElapsed / 1000).toFixed(2);
+    if (timerSec <= 0) {
+      return dispatch({ type: 'endGame' });
+    }
+    ctx.fillText(timerSec, canvas.width / 2 - 30, 180);
   }, [canvas, ctx]);
 
   const lockChangeAlert = (canvas) => {
