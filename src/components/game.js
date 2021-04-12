@@ -81,11 +81,10 @@ const Game = ({ screenHandle }) => {
     const screenX = cursorRef.current.x;
     const screenY = cursorRef.current.y;
     const targets = targetsRef.current;
-    const newTargets = targets.filter(({ x, y, width, height }) =>
+    const newTargets = targets.filter(({ x, y, radius }) =>
       // Filter out if target clicked inside
-      !(screenX + RADIUS >= x && screenX - RADIUS <= x + width && screenY + RADIUS >= y && screenY - RADIUS <= y + height));
-    const { enemies, currentEnemyIdx } = stateRef.current;
-    const enemy = enemies[currentEnemyIdx];
+      Math.sqrt(Math.pow(x - screenX, 2), Math.pow(y - screenY, 2)) >= radius + RADIUS);
+
     if (newTargets.length === targets.length) {
       // Player misses target and takes personal damage
       dispatch({ type: 'takeDamage' });
@@ -114,20 +113,22 @@ const Game = ({ screenHandle }) => {
 
   const spawnTarget = (canvas) => {
     if (!targetsRef.current.length && canvas) {
-      const WIDTH = 50;
-      const HEIGHT = 50;
+      const TARGET_RADIUS = 50;
 
       const { width, height } = canvas;
-      const x = random(width / 2 - width / 4, width - WIDTH - width / 2);
-      const y = random(height / 2 - height / 4, height - HEIGHT - height / 2);
-      targetsRef.current = [{ x, y, width: WIDTH, height: HEIGHT }];
+      const x = random(width / 2 - width / 4, width - TARGET_RADIUS - width / 2);
+      const y = random(height / 2 - height / 4, height - TARGET_RADIUS - height / 2);
+      targetsRef.current = [{ x, y, radius: TARGET_RADIUS }];
     }
   }
 
   const drawTargets = (ctx) => {
-    targetsRef.current.forEach(({ x, y, width, height }) => {
+    targetsRef.current.forEach(({ x, y, radius }) => {
       ctx.fillStyle = COLORS.omSand;
-      ctx.fillRect(x, y, width, height);
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, degToRad(360), true);
+      ctx.fill();
+      ctx.closePath();
     });
   };
 

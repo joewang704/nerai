@@ -69,7 +69,7 @@ const EnemyInfo = ({ timeRemaining }) => {
         </EnemyBar>
       </EnemyContainer>
       <DungeonContainer>
-        <h1>{state.dungeonName}</h1>
+        <h1>{state.dungeon.name}</h1>
         <div>Floor {state.currentEnemyIdx + 1} / {state.enemies.length}</div>
         <div>Time Remaining: {timeRemaining}</div>
         <div>Acquired Items: {state.collectedItems.length}</div>

@@ -39,7 +39,7 @@ const DungeonList = ({ openGameScreen }) => {
           <DungeonContainer key={i}>
             <h3>{name} {state.player.dungeonsCompleted[name] && <>✅</>}</h3>
             <div>Level: {lvl}</div>
-            <div>Items: <ItemList>{items.map(({ img }) => <img src={img} />)}</ItemList></div>
+            <div>Items: <ItemList>{items.map(({ img }, i) => <img src={img} key={i} />)}</ItemList></div>
             <br />
             <button onClick={() => {
               dispatch({

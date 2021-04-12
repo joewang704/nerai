@@ -25,6 +25,7 @@ const reducer = (state, action) => {
       return {
         status: 'INITIAL',
         player: state.player,
+        dungeon: {},
       }
     }
     case 'startGame':
@@ -33,7 +34,6 @@ const reducer = (state, action) => {
         status: 'RUNNING',
         enemies: action.payload.enemies,
         timer: action.payload.timer,
-        dungeonName: action.payload.name,
         dungeon: action.payload,
         currentEnemyIdx: 0,
         collectedXP: 0,
@@ -116,6 +116,7 @@ const reducer = (state, action) => {
           status: 'COMPLETED',
           collectedItems: state.collectedItems,
           collectedXP: state.collectedXP,
+          player: state.player,
           dungeon: {
             ...state.dungeon,
             success: false,
