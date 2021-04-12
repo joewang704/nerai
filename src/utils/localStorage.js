@@ -13,6 +13,7 @@ export const fetchPlayer = () => {
   if (playerJSON) {
     const player = JSON.parse(playerJSON);
     player.hp = player.maxHP;
+    if (!player.dungeonsCompleted) player.dungeonsCompleted = {};
     return player;
   }
   return INITIAL_PLAYER_STATS;

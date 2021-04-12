@@ -3,6 +3,7 @@ import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import styled from '@emotion/styled';
 
 import DungeonList from './dungeon_list';
+import DungeonSummary from './dungeon_summary';
 import SensitivityInput from './sensitivity_input';
 import Game from './game';
 
@@ -31,7 +32,7 @@ const App = () => {
   return (
     <GameContext.Provider value={{ state, dispatch }}>
       <Container>
-        {state.status !== 'RUNNING' &&
+        {state.status === 'INITIAL' &&
           <>
             <DungeonList openGameScreen={gameScreen.enter} />
             <SensitivityInput />
@@ -40,8 +41,7 @@ const App = () => {
         <FullScreen handle={gameScreen}>
           {state.status === 'RUNNING' && gameScreen.active && <Game screenHandle={gameScreen}/>}
         </FullScreen>
-        {state.status === 'COMPLETED' && <>You're a beast lol</>}
-        {state.status === 'GAME_OVER' && <>You suck lol</>}
+        {state.status === 'COMPLETED' && <DungeonSummary />}
       </Container>
     </GameContext.Provider>
   );

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 
 import { GameContext } from './app';
+import { COLORS } from '../data/constants';
 
 const Container = styled.div`
   position: absolute;
@@ -9,27 +10,35 @@ const Container = styled.div`
   left: 0;
   width: 100%;
   height: 100px;
-  background-color: white;
+  background-color: #333;
+  color: white;
   padding: 24px;
+  display: flex;
   h1 {
     font-size: 16px;
   }
 `;
 
+const EnemyContainer = styled.div`
+  width: 50%;
+`;
+
 const EnemyBar = styled.div`
   position: relative;
   width: calc(100% - 48px);
-  height: 50px;
+  height: 20px;
+  line-height: 20px;
   text-align: center;
-  line-height: 50px;
-  border: 1px solid #666;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: ${COLORS.metallicGray};
 `;
 
 const Health = styled.div`
   ${({ percent }) => ({
     width: `${Math.floor(percent * 100)}%`,
   })}
-  background-color: red;
+  background-color: ${COLORS.darkRed};
   position: absolute;
   height: 100%;
   top: 0;
@@ -40,7 +49,11 @@ const Text = styled.div`
   position: relative;
 `;
 
-const EnemyInfo = () => {
+const DungeonContainer = styled.div`
+  width: 50%;
+`;
+
+const EnemyInfo = ({ timeRemaining }) => {
   const { state } = useContext(GameContext);
 
   const { enemies, currentEnemyIdx } = state;
@@ -48,11 +61,19 @@ const EnemyInfo = () => {
 
   return (
     <Container>
-      <h1>{enemy.name}, Damage: {enemy.damage}, XP Gained on Kill: {enemy.xp}</h1>
-      <EnemyBar>
-        <Text>{enemy.hp} / {enemy.maxHP}</Text>
-        <Health percent={enemy.hp / enemy.maxHP} />
-      </EnemyBar>
+      <EnemyContainer>
+        <h1>{enemy.name}, Damage: {enemy.damage}, XP Gained on Kill: {enemy.xp}</h1>
+        <EnemyBar>
+          <Text>{enemy.hp} / {enemy.maxHP}</Text>
+          <Health percent={enemy.hp / enemy.maxHP} />
+        </EnemyBar>
+      </EnemyContainer>
+      <DungeonContainer>
+        <h1>{state.dungeonName}</h1>
+        <div>Floor {state.currentEnemyIdx + 1} / {state.enemies.length}</div>
+        <div>Time Remaining: {timeRemaining}</div>
+        <div>Acquired Items: {state.collectedItems.length}</div>
+      </DungeonContainer>
     </Container>
   );
 };

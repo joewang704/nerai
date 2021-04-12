@@ -3,11 +3,15 @@ import styled from '@emotion/styled';
 
 import { GameContext } from './app';
 
+const Container = styled.div`
+  padding: 24px;
+`;
+
 const SensitivityInput = () => {
   const { state, dispatch } = useContext(GameContext);
 
   return (
-    <div>
+    <Container>
       <br />
       <span>Current Sensitivity: {state.sensitivity}</span>
       <br />
@@ -19,7 +23,7 @@ const SensitivityInput = () => {
           dispatch({ type: 'setSensitivity', payload: { sensitivity: event.target.value } })
         }
       />
-    </div>
+    </Container>
   );
 };
 export default SensitivityInput;
