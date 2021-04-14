@@ -1,4 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
+import styled from '@emotion/styled';
 import * as d3 from 'd3-timer';
 
 import { GameContext } from './app';
@@ -21,6 +22,12 @@ import nineLarge from '../images/damage/9_large.png';
 
 const RADIUS = 5;
 const DAMAGE_NUMBERS_EXPIRATION_TIME = 600;
+const PLAYER_BAR_HEIGHT = 116;
+
+const Container = styled.div`
+  height: 100%;
+  width: 100%;
+`;
 
 const Game = ({ screenHandle }) => {
   const { state, dispatch } = useContext(GameContext);
@@ -47,9 +54,11 @@ const Game = ({ screenHandle }) => {
     setCanvas(canvas);
     const ctx = canvasRef.current.getContext('2d');
     setCtx(ctx);
-    const { innerWidth: width, innerHeight: height } = window;
-    canvasRef.current.width = width;
-    canvasRef.current.height = height;
+    // const { innerWidth: width, innerHeight: height } = window;
+    canvasRef.current.width = window.innerWidth;
+    canvasRef.current.height = window.innerHeight;
+    console.log(canvasRef.current.width);
+    console.log(canvasRef.current.height);
     canvas.requestPointerLock();
     const pointerLockChange = () => lockChangeAlert(canvas)
     document.addEventListener('pointerlockchange', pointerLockChange, false);
@@ -65,7 +74,7 @@ const Game = ({ screenHandle }) => {
       document.removeEventListener('pointerlockchange', pointerLockChange);
       document.removeEventListener('click', handleClick);
       document.exitPointerLock();
-      screenHandle.exit();
+      // screenHandle.exit();
     };
   }, [])
 
@@ -113,7 +122,7 @@ const Game = ({ screenHandle }) => {
 
   const spawnTarget = (canvas) => {
     if (!targetsRef.current.length && canvas) {
-      const TARGET_RADIUS = 50;
+      const TARGET_RADIUS = 30;
 
       const { width, height } = canvas;
       const x = random(width / 2 - width / 4, width - TARGET_RADIUS - width / 2);
@@ -159,10 +168,10 @@ const Game = ({ screenHandle }) => {
     ctx.closePath();
 
     // Enemy image
-    const enemyImageWidth = 20;
+    const enemyImageWidth = 37;
     const enemyImageHeight = 20;
     const enemyImageX = (width / 2) + 50;
-    const enemyImageY = height - 80 - enemyImageHeight;
+    const enemyImageY = height - PLAYER_BAR_HEIGHT - 60 - enemyImageHeight;
     if (imageRef.current) {
       ctx.drawImage(imageRef.current, enemyImageX, enemyImageY);
     }
@@ -227,7 +236,7 @@ const Game = ({ screenHandle }) => {
   const enemy = enemies && enemies[currentEnemyIdx];
 
   return (
-    <>
+    <Container>
       <EnemyInfo timeRemaining={timeRemaining} />
       <PlayerInfo />
       <canvas ref={canvasRef}>
@@ -235,7 +244,7 @@ const Game = ({ screenHandle }) => {
       <div style={{ display: 'none' }}>
         {enemy && <img src={enemy.img} ref={imageRef} />}
       </div>
-    </>
+    </Container>
   );
 }
 

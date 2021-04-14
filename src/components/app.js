@@ -17,7 +17,7 @@ export const GameContext = React.createContext();
 
 const App = () => {
   const [state, dispatch] = useGameReducer();
-  const gameScreen = useFullScreenHandle();
+  // const gameScreen = useFullScreenHandle();
 
   useEffect(() => {
     const { sensitivity, player } = state;
@@ -34,13 +34,15 @@ const App = () => {
       <Container>
         {state.status === 'INITIAL' &&
           <>
-            <DungeonList openGameScreen={gameScreen.enter} />
+            {/* <DungeonList openGameScreen={gameScreen.enter} /> */}
+            <DungeonList openGameScreen={() => {}} />
             <SensitivityInput />
           </>
         }
-        <FullScreen handle={gameScreen}>
-          {state.status === 'RUNNING' && gameScreen.active && <Game screenHandle={gameScreen}/>}
-        </FullScreen>
+        {/* <FullScreen handle={gameScreen}> */}
+          {/* {state.status === 'RUNNING' && gameScreen.active && <Game screenHandle={gameScreen}/>} */}
+        {state.status === 'RUNNING' && <Game />}
+        {/* </FullScreen> */}
         {state.status === 'COMPLETED' && <DungeonSummary />}
       </Container>
     </GameContext.Provider>
