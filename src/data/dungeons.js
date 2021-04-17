@@ -27,6 +27,7 @@ const SLIME_DUNGEON = {
       damage: 20,
       xp: 10,
       lvl: 1,
+      drops: [],
     },
   ],
   timer: 60,

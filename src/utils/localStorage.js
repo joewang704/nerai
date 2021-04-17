@@ -3,6 +3,7 @@ const INITIAL_PLAYER_STATS = {
   maxHP: 100,
   level: 1,
   xp: 0,
+  dungeonsCompleted: {},
 };
 
 const INITIAL_SENSITIVITY = 0.4;

@@ -168,8 +168,8 @@ const Game = ({ screenHandle }) => {
     ctx.closePath();
 
     // Enemy image
-    const enemyImageWidth = 37;
-    const enemyImageHeight = 20;
+    const enemyImageWidth = imageRef.current ? imageRef.current.width : 30;
+    const enemyImageHeight = imageRef.current ? imageRef.current.height : 30;
     const enemyImageX = (width / 2) + 50;
     const enemyImageY = height - PLAYER_BAR_HEIGHT - 60 - enemyImageHeight;
     if (imageRef.current) {
