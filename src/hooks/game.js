@@ -65,7 +65,7 @@ const reducer = (state, action) => {
         const reqXP = getXPToLevel(level);
         // Level if XP maxed
         if (newXP >= reqXP) {
-          newXP = reqXP - newXP;
+          newXP = newXP - reqXP;
           level++;
           state.dungeon.leveledUp = true;
         }
