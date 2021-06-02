@@ -32,11 +32,11 @@ export const ENEMIES = [
   {
     name: 'Red Snail',
     lvl: 5,
-    img: 'https://maplestory.io/api/GMS/222/mob/100101/render/stand/0',
+    img: 'https://maplestory.io/api/GMS/222/mob/100002/render/stand/0',
     ...getStats(5),
   },
   {
-    name: 'Red Snail',
+    name: 'Orange Mushroom',
     lvl: 7,
     img: 'https://maplestory.io/api/GMS/222/mob/100004/render/stand/0',
     ...getStats(7),

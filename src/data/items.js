@@ -1,4 +1,3 @@
-import { stringify } from 'uuid';
 import stick from '../images/weapons/swords/stick.png';
 
 const getStats = (level) => ({
@@ -19,7 +18,7 @@ const generateWeapon = ({
     ...getStats(level),
   },
   category: 'weapon',
-  id: stringify(name + level),
+  id: name,
   name,
   img,
   level,

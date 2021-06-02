@@ -15,6 +15,7 @@ const ItemList = styled.div`
 
 const Inventory = () => {
   const { state, dispatch } = useContext(GameContext);
+  console.log(state);
 
   return (
     <Container>
