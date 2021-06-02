@@ -1,5 +1,3 @@
-import stick from '../images/weapons/swords/stick.png';
-
 const getStats = (level) => ({
   // Base damage of weapon
   dmg: level + 10,
@@ -27,7 +25,7 @@ const generateWeapon = ({
 export const ITEMS = {
   3: generateWeapon({
     name: 'Stick',
-    img: stick,
+    img: 'https://maplestory.io/api/GMS/222/item/1302260/icon',
     level: 3,
   }),
   5: generateWeapon({
