@@ -16,8 +16,7 @@ export const fetchPlayer = () => {
   if (playerJSON) {
     const player = JSON.parse(playerJSON);
     if (player.hp && !player.maxHP) player.hp = player.maxHP;
-    console.log(Object.assign({}, player, INITIAL_PLAYER_STATS));
-    return player;
+    return Object.assign({}, player, INITIAL_PLAYER_STATS);
   }
   return INITIAL_PLAYER_STATS;
 }
