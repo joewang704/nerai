@@ -2,6 +2,7 @@ import { useReducer } from 'react';
 
 import { fetchPlayer, fetchSensitivity } from '../utils/localStorage';
 import { random } from '../utils';
+import { ITEMS } from '../data/items';
 
 const initialState = {
   status: 'INITIAL',
@@ -69,7 +70,7 @@ const reducer = (state, action) => {
           level++;
           state.dungeon.leveledUp = true;
         }
-        player = {
+        state.player = {
           ...state.player,
           xp: newXP,
           level,
@@ -78,9 +79,10 @@ const reducer = (state, action) => {
         state.collectedXP += enemy.xp;
 
         // Collect possible drops
-        enemy.drops.some(({ item, chance }) => {
-          if (Math.random() < chance) {
+        enemy.drops.some((item) => {
+          if (Math.random() < item.chance) {
             state.collectedItems.push(item);
+            state.player.inventory.push(item);
             return true;
           }
         });
@@ -131,9 +133,23 @@ const reducer = (state, action) => {
         },
       }
     }
+    case 'equipItem':
+      console.log(action);
+      return equipItem(state, action.payload);
     default:
       return state
   }
+}
+
+const equipItem = (state, payload) => {
+  const s = state;
+  const { item } = payload;
+  if (s.player.level >= item.level) {
+    s.player.equipment[item.category] = item;
+  } else {
+    // throw error here
+  }
+  return s;
 }
 
 export const useGameReducer = () => useReducer(reducer, initialState);

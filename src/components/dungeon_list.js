@@ -22,7 +22,7 @@ const ItemList = styled.div`
   margin-right: 24px;
 `;
 
-const DungeonList = ({ openGameScreen }) => {
+const DungeonList = () => {
   const { state, dispatch } = useContext(GameContext);
 
   return (
@@ -30,7 +30,7 @@ const DungeonList = ({ openGameScreen }) => {
       {DUNGEONS.map((dungeon, i) => {
         const { name, lvl, enemies } = dungeon;
         const items = Object.values(enemies.reduce((acc, curr) => {
-          curr.drops && curr.drops.forEach(({ item }) => {
+          curr.drops && curr.drops.forEach(item => {
             acc[item.id] = item;
           })
           return acc;
@@ -46,7 +46,6 @@ const DungeonList = ({ openGameScreen }) => {
                 type: 'startGame',
                 payload: dungeon,
               });
-              openGameScreen();
             }}>Start</button>
           </DungeonContainer>
         );

@@ -4,6 +4,8 @@ const INITIAL_PLAYER_STATS = {
   level: 1,
   xp: 0,
   dungeonsCompleted: {},
+  inventory: [],
+  equipment: {},
 };
 
 const INITIAL_SENSITIVITY = 0.4;
@@ -13,8 +15,8 @@ export const fetchPlayer = () => {
   const playerJSON = localStorage.getItem('player');
   if (playerJSON) {
     const player = JSON.parse(playerJSON);
-    player.hp = player.maxHP;
-    if (!player.dungeonsCompleted) player.dungeonsCompleted = {};
+    if (player.hp && !player.maxHP) player.hp = player.maxHP;
+    console.log(Object.assign({}, player, INITIAL_PLAYER_STATS));
     return player;
   }
   return INITIAL_PLAYER_STATS;

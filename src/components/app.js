@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import styled from '@emotion/styled';
 
 import DungeonList from './dungeon_list';
 import DungeonSummary from './dungeon_summary';
+import Inventory from './player/inventory';
+import Equipment from './player/equipment';
 import SensitivityInput from './sensitivity_input';
 import Game from './game';
 
 import { useGameReducer } from '../hooks/game';
 import { savePlayer, saveSensitivity } from '../utils/localStorage';
+import PlayerInfo from './player_info';
 
 const Container = styled.div`
 `;
@@ -17,7 +19,6 @@ export const GameContext = React.createContext();
 
 const App = () => {
   const [state, dispatch] = useGameReducer();
-  // const gameScreen = useFullScreenHandle();
 
   useEffect(() => {
     const { sensitivity, player } = state;
@@ -34,16 +35,19 @@ const App = () => {
       <Container>
         {state.status === 'INITIAL' &&
           <>
-            {/* <DungeonList openGameScreen={gameScreen.enter} /> */}
             <DungeonList openGameScreen={() => {}} />
-            <SensitivityInput />
+            {/* <SensitivityInput /> */}
+            <Inventory />
+            <Equipment />
+            <PlayerInfo />
           </>
         }
-        {/* <FullScreen handle={gameScreen}> */}
-          {/* {state.status === 'RUNNING' && gameScreen.active && <Game screenHandle={gameScreen}/>} */}
         {state.status === 'RUNNING' && <Game />}
-        {/* </FullScreen> */}
-        {state.status === 'COMPLETED' && <DungeonSummary />}
+        {state.status === 'COMPLETED' && 
+          <>
+            <DungeonSummary />
+            <PlayerInfo />
+          </>}
       </Container>
     </GameContext.Provider>
   );
