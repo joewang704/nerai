@@ -112,7 +112,6 @@ const Game = ({ screenHandle }) => {
   const tickAnimation = useStableCB((timeElapsed, [canvas, ctx]) => {
     if (!canvas || !ctx) return;
 
-    console.log(timeElapsed);
     spawnTarget(canvas);
     drawCanvas(canvas, ctx);
 
