@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/nerai/static/css/main.fca13729.chunk.css",
-    "main.js": "/nerai/static/js/main.ae8e621e.chunk.js",
-    "main.js.map": "/nerai/static/js/main.ae8e621e.chunk.js.map",
+    "main.js": "/nerai/static/js/main.5d72fb3b.chunk.js",
+    "main.js.map": "/nerai/static/js/main.5d72fb3b.chunk.js.map",
     "runtime-main.js": "/nerai/static/js/runtime-main.7548f0bf.js",
     "runtime-main.js.map": "/nerai/static/js/runtime-main.7548f0bf.js.map",
     "static/js/2.9fa3a98d.chunk.js": "/nerai/static/js/2.9fa3a98d.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.7548f0bf.js",
     "static/js/2.9fa3a98d.chunk.js",
     "static/css/main.fca13729.chunk.css",
-    "static/js/main.ae8e621e.chunk.js"
+    "static/js/main.5d72fb3b.chunk.js"
   ]
 }
