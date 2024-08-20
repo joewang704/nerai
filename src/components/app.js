@@ -1,16 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
-import DungeonList from './dungeon_list';
-import DungeonSummary from './dungeon_summary';
-import Inventory from './player/inventory';
-import Equipment from './player/equipment';
-import SensitivityInput from './sensitivity_input';
 import Game from './game';
+import { SettingsModal } from './settings';
 
 import { useGameReducer } from '../hooks/game';
-import { savePlayer, saveSensitivity } from '../utils/localStorage';
-import PlayerInfo from './player_info';
 
 const Container = styled.div`
 `;
@@ -19,34 +13,26 @@ export const GameContext = React.createContext();
 
 const App = () => {
   const [state, dispatch] = useGameReducer();
+  const [settings, setSettings] = useState(false);
 
-  useEffect(() => {
-    const { sensitivity, player } = state;
-    if (sensitivity) {
-      saveSensitivity(sensitivity);
-    }
-    if (player) {
-      savePlayer(JSON.stringify(player));
-    }
-  }, [state.sensitivity, state.player]);
+  const startGame = () => {
+    dispatch({ type: 'startGame', payload: { timer: 60 } });
+  }
 
   return (
     <GameContext.Provider value={{ state, dispatch }}>
       <Container>
         {state.status === 'INITIAL' &&
           <>
-            <DungeonList openGameScreen={() => {}} />
-            {/* <SensitivityInput /> */}
-            <Inventory />
-            <Equipment />
-            <PlayerInfo />
+            <button onClick={startGame}>Start Game</button>
+            <button onClick={() => setSettings(true)}>Settings</button>
+            <SettingsModal isOpen={settings} close={() => setSettings(false)} />
           </>
         }
         {state.status === 'RUNNING' && <Game />}
         {state.status === 'COMPLETED' && 
           <>
-            <DungeonSummary />
-            <PlayerInfo />
+            Game Over
           </>}
       </Container>
     </GameContext.Provider>
