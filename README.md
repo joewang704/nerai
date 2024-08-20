@@ -1,1 +1,1 @@
-Link to game available at: https://joewang704.github.io/aimer-react/
+Link to game available at: https://joewang704.github.io/nerai

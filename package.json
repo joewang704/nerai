@@ -1,8 +1,8 @@
 {
-  "name": "aimer-react",
+  "name": "nerai",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://joewang704.github.io/aimer-react",
+  "homepage": "http://joewang704.github.io/nerai",
   "dependencies": {
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
