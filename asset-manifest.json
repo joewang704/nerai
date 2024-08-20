@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/nerai/static/css/main.fca13729.chunk.css",
+    "main.js": "/nerai/static/js/main.ae8e621e.chunk.js",
+    "main.js.map": "/nerai/static/js/main.ae8e621e.chunk.js.map",
+    "runtime-main.js": "/nerai/static/js/runtime-main.7548f0bf.js",
+    "runtime-main.js.map": "/nerai/static/js/runtime-main.7548f0bf.js.map",
+    "static/js/2.9fa3a98d.chunk.js": "/nerai/static/js/2.9fa3a98d.chunk.js",
+    "static/js/2.9fa3a98d.chunk.js.map": "/nerai/static/js/2.9fa3a98d.chunk.js.map",
+    "static/js/3.2d293884.chunk.js": "/nerai/static/js/3.2d293884.chunk.js",
+    "static/js/3.2d293884.chunk.js.map": "/nerai/static/js/3.2d293884.chunk.js.map",
+    "index.html": "/nerai/index.html",
+    "static/css/main.fca13729.chunk.css.map": "/nerai/static/css/main.fca13729.chunk.css.map",
+    "static/js/2.9fa3a98d.chunk.js.LICENSE.txt": "/nerai/static/js/2.9fa3a98d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7548f0bf.js",
+    "static/js/2.9fa3a98d.chunk.js",
+    "static/css/main.fca13729.chunk.css",
+    "static/js/main.ae8e621e.chunk.js"
+  ]
+}
