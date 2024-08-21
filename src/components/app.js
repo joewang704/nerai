@@ -37,7 +37,9 @@ const App = () => {
         {state.status === 'SHOP' && <Shop />}
         {state.status === 'COMPLETED' && 
           <>
-            Game Over
+            <h1>Game Over</h1>
+            Score Reached: {state.currentScore}
+            Goal Score: {state.goalScore}
             <button onClick={startGame}>Play Again</button>
             <button onClick={returnHome}>Return Home</button>
           </>}
