@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import styled from '@emotion/styled';
 
 import { GameContext } from './app';
-import { COLORS } from '../data/constants';
 
 const Container = styled.div`
   position: absolute;
@@ -18,16 +17,12 @@ const Container = styled.div`
   }
 `;
 
-const Text = styled.div`
-  z-index: 2;
-  position: relative;
-`;
-
 const GameInfo = ({ timeRemaining }) => {
   const { state } = useContext(GameContext);
 
   return (
     <Container>
+      <h1>Level {state.level}</h1>
       <h1>Time Left: {timeRemaining}</h1>
       <h1>Current Score: {state.currentScore} / {state.goalScore}</h1>
     </Container>

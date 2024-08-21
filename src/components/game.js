@@ -5,7 +5,7 @@ import * as d3 from 'd3-timer';
 import { GameContext } from './app';
 import GameInfo from './game_info';
 import { degToRad, random, useStableCB } from '../utils';
-import { COLORS } from '../data/constants';
+import { TIERS } from '../data/targets';
 
 const RADIUS = 5;
 
@@ -14,7 +14,7 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const Game = ({ screenHandle }) => {
+const Game = () => {
   const { state, dispatch } = useContext(GameContext);
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState();
@@ -23,7 +23,6 @@ const Game = ({ screenHandle }) => {
   const cursorRef = useRef({ x: 500, y: 500 });
   const targetsRef = useRef([]);
   const stateRef = useRef(state);
-  const imageRef = useRef(null);
 
   useEffect(() => {
     stateRef.current = state; 
@@ -45,7 +44,6 @@ const Game = ({ screenHandle }) => {
       document.removeEventListener('pointerlockchange', pointerLockChange);
       document.removeEventListener('click', handleClick);
       document.exitPointerLock();
-      // screenHandle.exit();
     };
   }, [])
 
@@ -76,17 +74,20 @@ const Game = ({ screenHandle }) => {
 
   const spawnTarget = (canvas) => {
     if (!targetsRef.current.length && canvas) {
-      const { targetSize } = state;
+      const { targetSize, targets } = state;
       const { width, height } = canvas;
       const x = random(width / 2 - width / 4, width - targetSize - width / 2);
       const y = random(height / 2 - height / 4, height - targetSize - height / 2);
-      targetsRef.current = [{ x, y, radius: targetSize }];
+      
+      const target = targets[random(0, targets.length)];
+
+      targetsRef.current = [{ x, y, radius: targetSize, target }];
     }
   }
 
   const drawTargets = (ctx) => {
-    targetsRef.current.forEach(({ x, y, radius }) => {
-      ctx.fillStyle = COLORS.omSand;
+    targetsRef.current.forEach(({ x, y, radius, target }) => {
+      ctx.fillStyle = TIERS[target.tier];
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, degToRad(360), true);
       ctx.fill();
@@ -96,7 +97,7 @@ const Game = ({ screenHandle }) => {
 
   const drawCanvas = (canvas, ctx) => {
     const { width, height } = canvas;
-    ctx.fillStyle = 'grey';
+    ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, width, height);
 
     drawTargets(ctx);
@@ -118,7 +119,7 @@ const Game = ({ screenHandle }) => {
     // Handle timer state in game loop
     const timerSec = (state.timer - timeElapsed / 1000).toFixed(2);
     if (timerSec <= 0) {
-      return dispatch({ type: 'endGame' });
+      return dispatch({ type: 'endRound' });
     }
     setTimeRemaining(timerSec);
 

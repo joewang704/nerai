@@ -1,6 +1,8 @@
 import { useReducer } from 'react';
 
 import { fetch } from '../utils/localStorage';
+import { STARTING_DECK } from '../data/targets';
+import { ROUND_TIME, INITIAL_GOAL_SCORE } from '../data/constants';
 
 const initialState = {
   status: 'INITIAL',
@@ -9,11 +11,22 @@ const initialState = {
 };
 
 const INITIAL_GAME_STATE = {
-  timer: 30,
+  timer: ROUND_TIME,
   currentScore: 0,
-  goalScore: 30,
+  goalScore: INITIAL_GOAL_SCORE,
   level: 1,
+  money: 0,
+  targets: STARTING_DECK,
 }
+
+const bumpLevel = (state) => ({
+  ...state,
+  money: state.money + state.currentScore,
+  currentScore: 0,
+  level: state.level + 1,
+  goalScore: Math.ceil(state.goalScore * 1.5),
+  status: 'SHOP',
+});
 
 const reducer = (state, action) => {
   switch(action.type) {
@@ -41,8 +54,34 @@ const reducer = (state, action) => {
         ...state,
         currentScore: state.currentScore + action.payload.inc,
       }
+    case 'endRound':
+      if (state.currentScore >= state.goalScore) {
+        return bumpLevel(state);
+      }
+      return {
+        ...state,
+        status: 'COMPLETED',
+      }
+    case 'addTargets':
+      if (!state.status === 'SHOP') {
+        throw new Error('Must be in shop to purchase')
+      }
+      return {
+        ...state,
+        money: state.money - action.payload.spent,
+        targets: [...state.targets, ...action.payload.targets],
+      }
+    case 'startNextRound':
+      if (!state.status === 'SHOP') {
+        throw new Error('Must be in shop to begin next round')
+      }
+      return {
+        ...state,
+        status: 'RUNNING',
+        timer: ROUND_TIME,
+      }
     default:
-      return state
+      throw new Error('Action not recognized - ' + action.type)
   }
 }
 

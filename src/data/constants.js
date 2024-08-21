@@ -13,4 +13,12 @@ export const COLORS = {
   legendary: 'yellow',
 };
 
-export const MAX_NUM_DMG_COUNT_LENGTH = 3;
+// Testing values
+// export const PURCHASE_CARD_PRICE = 5;
+// export const ROUND_TIME = 5;
+// export const INITIAL_GOAL_SCORE = 1;
+
+// Real values
+export const PURCHASE_CARD_PRICE = 30;
+export const ROUND_TIME = 30;
+export const INITIAL_GOAL_SCORE = ROUND_TIME;

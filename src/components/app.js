@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 
 import Game from './game';
+import { Shop } from './shop';
 import { SettingsModal } from './settings';
 
 import { useGameReducer } from '../hooks/game';
@@ -16,7 +17,10 @@ const App = () => {
   const [settings, setSettings] = useState(false);
 
   const startGame = () => {
-    dispatch({ type: 'startGame', payload: { timer: 60 } });
+    dispatch({ type: 'startGame' });
+  }
+  const returnHome = () => {
+    dispatch({ type: 'returnToHomeScreen' });
   }
 
   return (
@@ -30,9 +34,12 @@ const App = () => {
           </>
         }
         {state.status === 'RUNNING' && <Game />}
+        {state.status === 'SHOP' && <Shop />}
         {state.status === 'COMPLETED' && 
           <>
             Game Over
+            <button onClick={startGame}>Play Again</button>
+            <button onClick={returnHome}>Return Home</button>
           </>}
       </Container>
     </GameContext.Provider>
