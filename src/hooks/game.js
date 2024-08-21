@@ -24,7 +24,7 @@ const bumpLevel = (state) => ({
   money: state.money + state.currentScore,
   currentScore: 0,
   level: state.level + 1,
-  goalScore: Math.ceil(state.goalScore * 1.5),
+  goalScore: Math.ceil(state.goalScore * 1.2),
   status: 'SHOP',
 });
 
