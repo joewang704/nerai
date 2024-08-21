@@ -35,7 +35,9 @@ const Game = () => {
     setCtx(ctx);
     canvasRef.current.width = window.innerWidth;
     canvasRef.current.height = window.innerHeight;
-    canvas.requestPointerLock();
+    canvas.requestPointerLock({
+      unadjustedMovement: true,
+    });
     const pointerLockChange = () => lockChangeAlert(canvas)
     document.addEventListener('pointerlockchange', pointerLockChange, false);
     document.addEventListener('click', handleClick);
@@ -56,20 +58,29 @@ const Game = () => {
   }, [canvas, ctx]);
 
   const handleClick = () => {
-    const screenX = cursorRef.current.x;
-    const screenY = cursorRef.current.y;
-    const targets = targetsRef.current;
-    const newTargets = targets.filter(({ x, y, radius }) =>
-      // Filter out if target clicked inside
-      Math.sqrt(Math.pow(x - screenX, 2), Math.pow(y - screenY, 2)) >= radius + RADIUS);
-
-    if (newTargets.length === targets.length) {
-      // Player loses points on missing target
-      dispatch({ type: 'hitTarget', payload: { inc: -1 }})
+    if (!document.pointerLockElement) {
+      // Handle 100ms required delay to relock pointer
+      setTimeout(() => {
+        canvasRef.current.requestPointerLock({
+          unadjustedMovement: true,
+        });
+      }, 100);
     } else {
-      dispatch({ type: 'hitTarget', payload: { inc: 1 }})
+      const screenX = cursorRef.current.x;
+      const screenY = cursorRef.current.y;
+      const targets = targetsRef.current;
+      const newTargets = targets.filter(({ x, y, radius }) =>
+        // Filter out if target clicked inside
+        Math.sqrt(Math.pow(x - screenX, 2), Math.pow(y - screenY, 2)) >= radius + RADIUS);
+
+      if (newTargets.length === targets.length) {
+        // Player loses points on missing target
+        dispatch({ type: 'hitTarget', payload: { inc: -1 }})
+      } else {
+        dispatch({ type: 'hitTarget', payload: { inc: 1 }})
+      }
+      targetsRef.current = newTargets;
     }
-    targetsRef.current = newTargets;
   }
 
   const spawnTarget = (canvas) => {
@@ -128,7 +139,9 @@ const Game = () => {
   const lockChangeAlert = (canvas) => {
     if (document.pointerLockElement === canvas ||
         document.mozPointerLockElement === canvas) {
-      canvas.addEventListener("mousemove", m => mouseMoveMemo(m), false);
+      canvas.addEventListener("mousemove", mouseMoveMemo, false);
+    } else {
+      canvas.removeEventListener("mousemove", mouseMoveMemo, false);
     }
   }
 
