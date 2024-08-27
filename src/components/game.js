@@ -108,8 +108,9 @@ const Game = () => {
 
   const spawnTarget = (canvas) => {
     const { baseTargets } = state.upgrades;
-    if (targetsRef.current.length <= baseTargets && canvas) {
-      for (let i = 0; i < baseTargets; i++) {
+    const numTargets = targetsRef.current.length;
+    if (numTargets <= baseTargets && canvas) {
+      for (let i = numTargets; i < baseTargets; i++) {
         targetsRef.current.push(createNewTarget());
       }
       targetsRef.current.push(createNewTarget());
