@@ -26,11 +26,11 @@ const OptionContainer = styled.div`
   }
 `;
 
-export const CardOption = ({ tier, onClick, selected }) => {
-  const color = TIERS[tier];
+export const CardOption = ({ title, description, onClick, selected }) => {
   return (
-    <OptionContainer style={{ borderColor: color, borderWidth: selected ? '5px' : '3px', fontWeight: selected ? 'bold' : 'normal' }} onClick={onClick}>
-      Effect: None
+    <OptionContainer style={{ borderColor: '#eee', borderWidth: selected ? '5px' : '3px', fontWeight: selected ? 'bold' : 'normal' }} onClick={onClick}>
+      {title}<br />
+      {description}
     </OptionContainer>
   )
 }

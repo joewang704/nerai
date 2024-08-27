@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from '@emotion/styled';
 
-import { generateRandomTarget } from '../data/targets';
+import { generateRandomUpgrades, getUpgradeDescription, UPGRADES } from '../data/targets';
 import { PURCHASE_CARD_PRICE } from '../data/constants';
 import { Modal } from "./shared/modal";
 import { Card, CardOption } from "./shared/card";
@@ -15,7 +15,7 @@ export const Shop = () => {
   const { state, dispatch } = useContext(GameContext);
 
   const purchaseCard = () => {
-    setPurchaseCardModal([generateRandomTarget(), generateRandomTarget(), generateRandomTarget()]);
+    setPurchaseCardModal(generateRandomUpgrades({ count: 3 }));
   };
 
   return (
@@ -25,11 +25,11 @@ export const Shop = () => {
       <br />
       Current Deck: 
       <div style={{ display: 'flex'}}>
-        {state.targets.map(({ tier }) => (
-          <Card tier={tier} />
+        {state.targets.map(({ tier }, i) => (
+          <Card tier={tier} key={i + tier} />
         ))}
       </div>
-      <button onClick={purchaseCard} disabled={state.money < PURCHASE_CARD_PRICE}>Purchase Card ({PURCHASE_CARD_PRICE} gold)</button>
+      <button onClick={purchaseCard}>Purchase Card</button>
       <button disabled={state.money < PURCHASE_CARD_PRICE}>Remove Card (200 gold)</button>
       <br />
       <button onClick={() => dispatch({ type: 'startNextRound' })}>Next Level</button>
@@ -39,20 +39,29 @@ export const Shop = () => {
 }
 
 const PurchaseCardModal = ({ options, close }) => {
-  const { dispatch } = useContext(GameContext);
+  const { state, dispatch } = useContext(GameContext);
   const [selected, setSelected] = useState(0);
 
   const collect = () => {
-    dispatch({ type: 'addTargets', payload: { targets: [options[selected]], spent: PURCHASE_CARD_PRICE }})
+    dispatch({ type: 'upgrade', payload: { upgrades: [options[selected]] }})
     close();
   }
 
   return (
     options ? <Modal close={() => {}}>
       <h1>Choose Your Card</h1>
-      {options.map(({ tier }, i) => (
-        <CardOption tier={tier} onClick={() => setSelected(i)} selected={selected === i} />
-      ))}
+      {options.map((name, i) => {
+        const level = state.upgrades[name];
+        return (
+          <CardOption
+            key={i}
+            title={'Level ' + level}
+            description={getUpgradeDescription({ level, name })}
+            onClick={() => setSelected(i)}
+            selected={selected === i}
+          />
+        )
+      })}
       <button onClick={collect}>Collect</button>
     </Modal> : <></>
   );

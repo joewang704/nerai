@@ -20,5 +20,5 @@ export const COLORS = {
 
 // Real values
 export const PURCHASE_CARD_PRICE = 30;
-export const ROUND_TIME = 30;
-export const INITIAL_GOAL_SCORE = ROUND_TIME;
+export const ROUND_TIME = 20;
+export const INITIAL_GOAL_SCORE = 10;

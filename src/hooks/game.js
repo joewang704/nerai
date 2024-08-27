@@ -1,13 +1,13 @@
 import { useReducer } from 'react';
 
-import { fetch } from '../utils/localStorage';
-import { STARTING_DECK } from '../data/targets';
+import { fetch, fetchInt } from '../utils/localStorage';
+import { STARTING_DECK, INITIAL_UPGRADES } from '../data/targets';
 import { ROUND_TIME, INITIAL_GOAL_SCORE } from '../data/constants';
 
 const initialState = {
   status: 'INITIAL',
   sensitivity: fetch('sensitivity'),
-  targetSize: fetch('targetSize'),
+  targetSize: fetchInt('targetSize'),
 };
 
 const INITIAL_GAME_STATE = {
@@ -17,6 +17,7 @@ const INITIAL_GAME_STATE = {
   level: 1,
   money: 0,
   targets: STARTING_DECK,
+  upgrades: INITIAL_UPGRADES,
 }
 
 const bumpLevel = (state) => ({
@@ -50,9 +51,14 @@ const reducer = (state, action) => {
       }
     // In-game actions
     case 'hitTarget':
+      const newScore = state.currentScore + action.payload.inc;
+      if (newScore >= state.goalScore) {
+        // Complete round
+        return bumpLevel(state);
+      }
       return {
         ...state,
-        currentScore: state.currentScore + action.payload.inc,
+        currentScore: newScore,
       }
     case 'endRound':
       if (state.currentScore >= state.goalScore) {
@@ -62,14 +68,15 @@ const reducer = (state, action) => {
         ...state,
         status: 'COMPLETED',
       }
-    case 'addTargets':
+    case 'upgrade':
       if (!state.status === 'SHOP') {
         throw new Error('Must be in shop to purchase')
       }
+      const upgrades = Object.assign({}, state.upgrades);
+      action.payload.upgrades.forEach(upgrade => upgrades[upgrade]++);
       return {
         ...state,
-        money: state.money - action.payload.spent,
-        targets: [...state.targets, ...action.payload.targets],
+        upgrades,
       }
     case 'startNextRound':
       if (!state.status === 'SHOP') {

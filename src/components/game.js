@@ -4,8 +4,8 @@ import * as d3 from 'd3-timer';
 
 import { GameContext } from './app';
 import GameInfo from './game_info';
-import { degToRad, random, useStableCB } from '../utils';
-import { TIERS } from '../data/targets';
+import { degToRad, random, useStableCB, rollProbability } from '../utils';
+import { TIERS, generateRandomTarget } from '../data/targets';
 
 const RADIUS = 5;
 
@@ -39,12 +39,13 @@ const Game = () => {
       unadjustedMovement: true,
     });
     const pointerLockChange = () => lockChangeAlert(canvas)
+    const onClick = () => handleClick(canvas)
     document.addEventListener('pointerlockchange', pointerLockChange, false);
-    document.addEventListener('click', handleClick);
+    document.addEventListener('click', onClick);
 
     return () => {
       document.removeEventListener('pointerlockchange', pointerLockChange);
-      document.removeEventListener('click', handleClick);
+      document.removeEventListener('click', onClick);
       document.exitPointerLock();
     };
   }, [])
@@ -57,7 +58,7 @@ const Game = () => {
     return () => t && t.stop()
   }, [canvas, ctx]);
 
-  const handleClick = () => {
+  const handleClick = (canvas) => {
     if (!document.pointerLockElement) {
       // Handle 100ms required delay to relock pointer
       setTimeout(() => {
@@ -69,30 +70,49 @@ const Game = () => {
       const screenX = cursorRef.current.x;
       const screenY = cursorRef.current.y;
       const targets = targetsRef.current;
-      const newTargets = targets.filter(({ x, y, radius }) =>
+      let hitTarget;
+      const newTargets = targets.filter(({ x, y, radius, target }) => {
         // Filter out if target clicked inside
-        Math.sqrt(Math.pow(x - screenX, 2), Math.pow(y - screenY, 2)) >= radius + RADIUS);
+        const targetMissed = Math.sqrt(Math.pow(x - screenX, 2) + Math.pow(y - screenY, 2)) >= (radius + RADIUS);
+        if (!targetMissed) {
+          hitTarget = target;
+        }
+        return targetMissed;
+      });
 
-      if (newTargets.length === targets.length) {
+      if (!hitTarget) {
         // Player loses points on missing target
         dispatch({ type: 'hitTarget', payload: { inc: -1 }})
       } else {
-        dispatch({ type: 'hitTarget', payload: { inc: 1 }})
+        const { extraSpawnOnHit } = state.upgrades;
+        if (extraSpawnOnHit > 0 && rollProbability(extraSpawnOnHit * 0.05)) {
+          newTargets.push(createNewTarget());
+          newTargets.push(createNewTarget());
+        }
+        dispatch({ type: 'hitTarget', payload: { inc: hitTarget.tier + 1 }})
+        targetsRef.current = newTargets;
       }
-      targetsRef.current = newTargets;
     }
   }
 
-  const spawnTarget = (canvas) => {
-    if (!targetsRef.current.length && canvas) {
-      const { targetSize, targets } = state;
-      const { width, height } = canvas;
-      const x = random(width / 2 - width / 4, width - targetSize - width / 2);
-      const y = random(height / 2 - height / 4, height - targetSize - height / 2);
-      
-      const target = targets[random(0, targets.length)];
+  const createNewTarget = () => {
+    if (!canvasRef.current) {
+      throw new Error('Cannot spawn new target with no canvas');
+    }
+    const { targetSize, level } = state;
+    const { width, height } = canvasRef.current;
+    const x = random(width / 2 - width / 4, width - targetSize - width / 2);
+    const y = random(height / 2 - height / 4, height - targetSize - height / 2);
+    return { x, y, radius: targetSize, target: generateRandomTarget(level) };
+  }
 
-      targetsRef.current = [{ x, y, radius: targetSize, target }];
+  const spawnTarget = (canvas) => {
+    const { baseTargets } = state.upgrades;
+    if (targetsRef.current.length <= baseTargets && canvas) {
+      for (let i = 0; i < baseTargets; i++) {
+        targetsRef.current.push(createNewTarget());
+      }
+      targetsRef.current.push(createNewTarget());
     }
   }
 
