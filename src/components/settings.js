@@ -1,6 +1,7 @@
 import { useEffect, useContext } from 'react';
 
 import { Modal } from "./shared/modal";
+import { Button } from "./shared/button";
 import { GameContext } from './app';
 
 import { save } from '../utils/localStorage';
@@ -42,7 +43,7 @@ export const SettingsModal = ({ isOpen, close }) => {
         />
       </div>
       <br />
-      <button onClick={close}>Save</button>
+      <Button onClick={close}>Save</Button>
     </Modal> : <></>
   );
 }

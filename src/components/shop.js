@@ -4,10 +4,15 @@ import styled from '@emotion/styled';
 import { generateRandomUpgrades, getUpgradeDescription, UPGRADES } from '../data/targets';
 import { PURCHASE_CARD_PRICE } from '../data/constants';
 import { Modal } from "./shared/modal";
+import { Button } from "./shared/button";
+import { Centered } from "./shared/util";
 import { Card, CardOption } from "./shared/card";
 import { GameContext } from './app';
 
-const Container = styled.div`
+const Container = styled(Centered)`
+  display: flex;
+  flex-direction: column;
+  color: white;
 `;
 
 export const Shop = () => {
@@ -23,16 +28,14 @@ export const Shop = () => {
       <h1>Shop</h1>
       Current Gold: {state.money}
       <br />
-      Current Deck: 
+      Current Upgrades: 
       <div style={{ display: 'flex'}}>
-        {state.targets.map(({ tier }, i) => (
-          <Card tier={tier} key={i + tier} />
-        ))}
+        {JSON.stringify(state.upgrades)}
       </div>
-      <button onClick={purchaseCard}>Purchase Card</button>
-      <button disabled={state.money < PURCHASE_CARD_PRICE}>Remove Card (200 gold)</button>
+      <br /><br />
+      <Button onClick={purchaseCard} disabled={state.money < PURCHASE_CARD_PRICE}>Purchase Upgrade ({PURCHASE_CARD_PRICE} gold)</Button>
       <br />
-      <button onClick={() => dispatch({ type: 'startNextRound' })}>Next Level</button>
+      <Button onClick={() => dispatch({ type: 'startNextRound' })}>Next Level</Button>
       <PurchaseCardModal options={purchaseCardModal} close={() => setPurchaseCardModal()} />
     </Container>
   );

@@ -97,7 +97,8 @@ const Game = () => {
 
   const createNewTarget = () => {
     if (!canvasRef.current) {
-      throw new Error('Cannot spawn new target with no canvas');
+      // Return dummy target if target created while canvas does not exist (happens during race condition)
+      return { x: 0, y: 0, radius: 0, target: generateRandomTarget(0) };
     }
     const { targetSize, level } = state;
     const { width, height } = canvasRef.current;
@@ -129,7 +130,7 @@ const Game = () => {
 
   const drawCanvas = (canvas, ctx) => {
     const { width, height } = canvas;
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, width, height);
 
     drawTargets(ctx);

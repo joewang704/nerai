@@ -20,7 +20,7 @@ const Container = styled.div`
   z-index: 2;
   background-color: white;
   padding: 24px;
-  border-radius: 4px;
+  border-radius: 16px;
   opacity: 1;
 `;
 

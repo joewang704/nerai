@@ -10,14 +10,21 @@ const Container = styled.div`
   left: 0;
   width: 100%;
   height: 80px;
-  background-color: #333;
   color: white;
-  padding: 12px 24px 24px;
-  display: flex;
-  h1 {
-    margin-right: 48px;
-  }
 `;
+
+const Left = styled.div`
+  float: left;
+`
+
+const Right = styled.div`
+  float: right;
+`
+
+const Center = styled.div`
+  margin: 0 auto;
+  width: 100px;
+`
 
 const GameInfo = ({ timeRemaining }) => {
   const { state } = useContext(GameContext);
@@ -29,10 +36,17 @@ const GameInfo = ({ timeRemaining }) => {
 
   return (
     <Container>
-      <h1>Level {state.level}</h1>
-      <h1>Current Score: {state.currentScore} / {state.goalScore}</h1>
-      <h1>Time Left: {timeRemaining}</h1>
-      <p>Upgrades: {upgradeDescriptions}</p>
+      <Left>
+        <h1>Level {state.level}</h1>
+        <h1>Score: {state.currentScore} / {state.goalScore}</h1>
+      </Left>
+      <Right>
+        <p>Upgrades</p>
+        <p>{upgradeDescriptions}</p>
+      </Right>
+      <Center>
+        <h1>{timeRemaining}</h1>
+      </Center>
     </Container>
   );
 };

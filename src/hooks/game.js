@@ -2,7 +2,7 @@ import { useReducer } from 'react';
 
 import { fetch, fetchInt } from '../utils/localStorage';
 import { STARTING_DECK, INITIAL_UPGRADES } from '../data/targets';
-import { ROUND_TIME, INITIAL_GOAL_SCORE } from '../data/constants';
+import { ROUND_TIME, INITIAL_GOAL_SCORE, COMPLETE_ROUND_ON_SCORE_HIT } from '../data/constants';
 
 const initialState = {
   status: 'INITIAL',
@@ -52,7 +52,7 @@ const reducer = (state, action) => {
     // In-game actions
     case 'hitTarget':
       const newScore = state.currentScore + action.payload.inc;
-      if (newScore >= state.goalScore) {
+      if (newScore >= state.goalScore && COMPLETE_ROUND_ON_SCORE_HIT) {
         // Complete round
         return bumpLevel(state);
       }
