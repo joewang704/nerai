@@ -51,35 +51,25 @@ export const generateRandomTarget = (level) => {
   }
 }
 
-export const UPGRADES = ['baseTargets', 'extraSpawnOnHit', 'multiOnHit', 'multiOnConsecutiveHit']
 export const UPGRADE_INFO = {
   baseTargets: {
-    descriptions: [
-      'Increases base number of targets by 1',
-      'Increases base number of targets by 2',
-      'Increases base number of targets by 3',
-      'Increases base number of targets by 4',
-    ],
+    description: level => `Increases base number of targets by ${level}`,
+    maxLevel: 5,
   },
   extraSpawnOnHit: {
-    descriptions: [
-      '5% chance of extra target spawning on hit',
-      '10% chance of extra target spawning on hit',
-      '15% chance of extra target spawning on hit',
-      '20% chance of extra target spawning on hit',
-    ],
+    description: level => `${level * 5}% chance of extra target spawning on hit`,
+    maxLevel: 5,
   },
-  multiOnHit: {
-    descriptions: [
-      'Not implemented yet. Do not choose'
-    ],
+  multiNextHit: {
+    description: level => `${level * 5}% chance of spawning a target that will x2 points on next target`,
+    maxLevel: 5,
   },
   multiOnConsecutiveHit: {
-    descriptions: [
-      'Not implemented yet. Do not choose'
-    ],
+    description: level => 'Not implemented yet. Do not choose',
+    maxLevel: 5,
   },
 }
+export const UPGRADES = Object.keys(UPGRADE_INFO)
 export const INITIAL_UPGRADES = UPGRADES.reduce((acc, value) => {
   acc[value] = 0;
   return acc;
@@ -100,10 +90,6 @@ export const generateRandomUpgrades = ({ count }) => {
   return upgrades;
 }
 
-export const getUpgradeDescription = ({ level, name }) => UPGRADE_INFO[name]['descriptions'][level];
-
-export const STARTING_DECK = [
-  generateTarget(0),
-  generateTarget(0),
-  generateTarget(0),
-]
+export const getUpgradeDescription = ({ level, name }) => {
+  return UPGRADE_INFO[name].description(level + 1);
+}

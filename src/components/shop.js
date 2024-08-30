@@ -46,7 +46,7 @@ const PurchaseCardModal = ({ options, close }) => {
   const [selected, setSelected] = useState(0);
 
   const collect = () => {
-    dispatch({ type: 'upgrade', payload: { upgrades: [options[selected]] }})
+    dispatch({ type: 'upgrade', payload: { upgrades: [options[selected]], price: PURCHASE_CARD_PRICE }})
     close();
   }
 

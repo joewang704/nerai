@@ -19,9 +19,11 @@ const Game = () => {
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState();
   const [ctx, setCtx] = useState();
-  const [timeRemaining, setTimeRemaining] = useState();
+  const timeRemainingRef = useRef();
+  const [timeRemainingRender, setTimeRemainingRender] = useState();
   const cursorRef = useRef({ x: 500, y: 500 });
   const targetsRef = useRef([]);
+  const numbersRef = useRef([]);
   const stateRef = useRef(state);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const Game = () => {
       unadjustedMovement: true,
     });
     const pointerLockChange = () => lockChangeAlert(canvas)
-    const onClick = () => handleClick(canvas)
+    const onClick = () => handleClick()
     document.addEventListener('pointerlockchange', pointerLockChange, false);
     document.addEventListener('click', onClick);
 
@@ -58,7 +60,7 @@ const Game = () => {
     return () => t && t.stop()
   }, [canvas, ctx]);
 
-  const handleClick = (canvas) => {
+  const handleClick = () => {
     if (!document.pointerLockElement) {
       // Handle 100ms required delay to relock pointer
       setTimeout(() => {
@@ -83,13 +85,30 @@ const Game = () => {
       if (!hitTarget) {
         // Player loses points on missing target
         dispatch({ type: 'hitTarget', payload: { inc: -1 }})
+        numbersRef.current.push({
+          x: screenX,
+          y: screenY,
+          text: '-1',
+          style: 'red',
+          timeRemaining: timeRemainingRef.current - 0.3,
+        });
       } else {
-        const { extraSpawnOnHit } = state.upgrades;
+        const { extraSpawnOnHit, multiNextClick } = state.upgrades;
         if (extraSpawnOnHit > 0 && rollProbability(extraSpawnOnHit * 0.05)) {
           newTargets.push(createNewTarget());
           newTargets.push(createNewTarget());
+        } else if (multiNextClick > 0 && rollProbability(multiNextClick * 0.05)) {
+          // TODO: spawn multiplier target
         }
         dispatch({ type: 'hitTarget', payload: { inc: hitTarget.tier + 1 }})
+        // Don't show text on hit for now, too distracting
+        // numbersRef.current.push({
+        //   x: screenX,
+        //   y: screenY,
+        //   text: `+${hitTarget.tier + 1}`,
+        //   style: TIERS[hitTarget.tier],
+        //   timeRemaining: timeRemainingRef.current - 0.1,
+        // });
         targetsRef.current = newTargets;
       }
     }
@@ -128,12 +147,26 @@ const Game = () => {
     });
   };
 
-  const drawCanvas = (canvas, ctx) => {
+  const drawNumbers = (ctx) => {
+    ctx.font = "24px Arial";
+    const numbersToShow = numbersRef.current.filter(({ timeRemaining }) => {
+      return timeRemaining < timeRemainingRef.current
+    });
+    numbersRef.current = numbersToShow;
+    numbersRef.current.forEach(({ x, y, text, style }) => {
+      ctx.fillStyle = style;
+      ctx.fillText(text, x, y)
+    });
+  };
+
+  const drawCanvas = (canvas, ctx, timerSec) => {
     const { width, height } = canvas;
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, width, height);
 
     drawTargets(ctx);
+
+    drawNumbers(ctx, timerSec);
 
     // Cursor
     ctx.fillStyle = "#f00";
@@ -147,14 +180,16 @@ const Game = () => {
     if (!canvas || !ctx) return;
 
     spawnTarget(canvas);
-    drawCanvas(canvas, ctx);
 
     // Handle timer state in game loop
-    const timerSec = (state.timer - timeElapsed / 1000).toFixed(2);
-    if (timerSec <= 0) {
+    const timeRemaining = state.timer - timeElapsed / 1000;
+    if (timeRemaining <= 0) {
       return dispatch({ type: 'endRound' });
     }
-    setTimeRemaining(timerSec);
+    timeRemainingRef.current = timeRemaining;
+    setTimeRemainingRender(timeRemaining.toFixed(2));
+
+    drawCanvas(canvas, ctx, timeRemaining);
 
   }, [canvas, ctx]);
 
@@ -194,7 +229,7 @@ const Game = () => {
 
   return (
     <Container>
-      <GameInfo timeRemaining={timeRemaining} />
+      <GameInfo timeRemaining={timeRemainingRender} />
       <canvas ref={canvasRef}>
       </canvas>
     </Container>

@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 
 import { fetch, fetchInt } from '../utils/localStorage';
-import { STARTING_DECK, INITIAL_UPGRADES } from '../data/targets';
+import { INITIAL_UPGRADES } from '../data/targets';
 import { ROUND_TIME, INITIAL_GOAL_SCORE, COMPLETE_ROUND_ON_SCORE_HIT } from '../data/constants';
 
 const initialState = {
@@ -16,7 +16,6 @@ const INITIAL_GAME_STATE = {
   goalScore: INITIAL_GOAL_SCORE,
   level: 1,
   money: 0,
-  targets: STARTING_DECK,
   upgrades: INITIAL_UPGRADES,
 }
 
@@ -52,14 +51,15 @@ const reducer = (state, action) => {
     // In-game actions
     case 'hitTarget':
       const newScore = state.currentScore + action.payload.inc;
-      if (newScore >= state.goalScore && COMPLETE_ROUND_ON_SCORE_HIT) {
-        // Complete round
-        return bumpLevel(state);
-      }
-      return {
+      const newScoreState = {
         ...state,
         currentScore: newScore,
+      };
+      if (newScore >= state.goalScore && COMPLETE_ROUND_ON_SCORE_HIT) {
+        // Complete round
+        return bumpLevel(newScoreState);
       }
+      return newScoreState;
     case 'endRound':
       if (state.currentScore >= state.goalScore) {
         return bumpLevel(state);
@@ -76,6 +76,7 @@ const reducer = (state, action) => {
       action.payload.upgrades.forEach(upgrade => upgrades[upgrade]++);
       return {
         ...state,
+        money: state.money - action.payload.price,
         upgrades,
       }
     case 'startNextRound':
