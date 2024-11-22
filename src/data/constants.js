@@ -13,14 +13,8 @@ export const COLORS = {
   legendary: 'yellow',
 };
 
-// Test values
-// export const PURCHASE_CARD_PRICE = 1;
-// export const ROUND_TIME = 20;
-// export const INITIAL_GOAL_SCORE = 1;
-// export const COMPLETE_ROUND_ON_SCORE_HIT = true;
-
 // Real values
 export const PURCHASE_CARD_PRICE = 30;
 export const ROUND_TIME = 20;
 export const INITIAL_GOAL_SCORE = 10;
-export const COMPLETE_ROUND_ON_SCORE_HIT = false;
+export const COMPLETE_ROUND_ON_SCORE_HIT = true;

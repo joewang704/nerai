@@ -82,33 +82,8 @@ const Game = () => {
         return targetMissed;
       });
 
-      if (!hitTarget) {
-        // Player loses points on missing target
-        dispatch({ type: 'hitTarget', payload: { inc: -1 }})
-        numbersRef.current.push({
-          x: screenX,
-          y: screenY,
-          text: '-1',
-          style: 'red',
-          timeRemaining: timeRemainingRef.current - 0.3,
-        });
-      } else {
-        const { extraSpawnOnHit, multiNextClick } = state.upgrades;
-        if (extraSpawnOnHit > 0 && rollProbability(extraSpawnOnHit * 0.05)) {
-          newTargets.push(createNewTarget());
-          newTargets.push(createNewTarget());
-        } else if (multiNextClick > 0 && rollProbability(multiNextClick * 0.05)) {
-          // TODO: spawn multiplier target
-        }
+      if (hitTarget) {
         dispatch({ type: 'hitTarget', payload: { inc: hitTarget.tier + 1 }})
-        // Don't show text on hit for now, too distracting
-        // numbersRef.current.push({
-        //   x: screenX,
-        //   y: screenY,
-        //   text: `+${hitTarget.tier + 1}`,
-        //   style: TIERS[hitTarget.tier],
-        //   timeRemaining: timeRemainingRef.current - 0.1,
-        // });
         targetsRef.current = newTargets;
       }
     }
@@ -229,7 +204,7 @@ const Game = () => {
 
   return (
     <Container>
-      <GameInfo timeRemaining={timeRemainingRender} />
+      <GameInfo timeRemaining={timeRemainingRef.current} />
       <canvas ref={canvasRef}>
       </canvas>
     </Container>
